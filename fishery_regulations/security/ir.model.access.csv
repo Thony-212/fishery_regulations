@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fishery_reg_consulta,fishery.reg.consulta,model_fishery_regulation,group_fishery_readonly,1,0,0,0
+access_fishery_reg_usuario,fishery.reg.usuario,model_fishery_regulation,group_fishery_user,1,1,1,0
+access_fishery_reg_admin,fishery.reg.admin,model_fishery_regulation,group_fishery_manager,1,1,1,1
