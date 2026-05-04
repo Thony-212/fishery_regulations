@@ -2,7 +2,7 @@
     'name' : 'Gestión de Normativas Pesqueras',
     'version' : '1.0',
     'category' : 'Intranet',
-    'description' : 'Registro de normativas legales.',
+    'description' : "Registro de normativas legales.",
     'autor' : '',
     'depends' : ['base',"mail"],
 

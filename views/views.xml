@@ -7,11 +7,11 @@
             <list default_order = "publication_date desc">
                 <field name= "official_gazette" />
                 <field name= "is_extraordinary" />
-                <field name= "official_regulations" />
                 <field name= "regulation_type" widget="badge" />
+                <field name= "official_regulations" />
                 <field name= "type_status" widget="badge" />
+                <field name= "normative_date" />
                 <field name= "publication_date" />
-                <field name= "legal_instrument" />
                 <field name="derogates_id" optional="hide"/>
             </list>
         </field>
@@ -27,19 +27,24 @@
                     <field name= "type_status" widget="statusbar" options="{'clickable': True}"/>
                 </header>
                 <sheet>
+                <group>
                     <group>
                         <field name= "official_gazette"/>
                         <field name= "is_extraordinary"/>
                         <field name= "official_regulations"/>
                         <field name= "regulation_type"/>
+                    </group>
+                    <group>
                         <field name="derogates_id"/>
                         <field name="derogated_by_id" invisible="type_status != 'derogado'" readonly= "1"/>
+                        <field name= "normative_date" />
                         <field name= "publication_date"/>
                         <field name= "attachment_ids" widget="many2many_binary"/> 
                     </group>
-                    <group>
-                        <field name= "legal_instrument"/>
-                    </group>
+                </group>
+                <group>
+                    <field name= "legal_instrument"/>
+                </group>
                 </sheet>
                 <chatter/>
             </form>
@@ -67,6 +72,7 @@
                     <filter string="Tipo de Normativa" name="group_by_type" context="{'group_by': 'regulation_type'}"/>
                     <filter string="Estado" name="group_by_status" context="{'group_by': 'type_status'}"/>
                     <filter string="Año" name="group_by_year" context="{'group_by': 'publication_date'}"/>
+                    <filter string="Fecha de normativa" name="group_by_normative_date" context="{'group_by': 'normative_date'}"/>
                 </group>
             </search>
         </field>

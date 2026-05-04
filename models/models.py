@@ -13,16 +13,16 @@ class FisheryRegulation(models.Model):
         tracking=True
     )
 
-    official_regulations = fields.Integer(
-        string = 'N° de Normativa',
+    official_regulations = fields.Char(
+        string = 'Número',
         required = True,
         help="Ingrese solo el número, sin puntos ni letras.",
         tracking=True
     )
 
     is_extraordinary = fields.Boolean(
-        string = '¿Es Extraordinario?',
-        required = True,
+        string = 'Extraordinario',
+        default = False,
         tracking=True
     )
 
@@ -64,13 +64,19 @@ class FisheryRegulation(models.Model):
     )
 
     publication_date = fields.Date(
-        string = 'Facha de publicación',
+        string = 'Fecha de publicación',
+        default = fields.Date.today
+    )
+
+    normative_date = fields.Date(
+
+        string = 'Fecha de normativa',
         default = fields.Date.today
     )
 
     legal_instrument = fields.Html(
-        string = 'Instrumento Jurídico / Descripción',
-        required = True
+        string = 'Descripción',
+        help = 'Ingrese una descripción de la normativa, incluyendo su contenido y alcance.',
     )
 
     attachment_ids = fields.Many2many(
