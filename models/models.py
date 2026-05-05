@@ -14,7 +14,7 @@ class FisheryRegulation(models.Model):
         help="El título se genera automáticamente a partir del número de gaceta oficial y si es extraordinaria o no."
     )
 
-    official_gazette = fields.Integer(
+    official_gazette = fields.Char(
         string = 'N° gaceta oficial',
         required = True,
         help="Ingrese solo el número, sin puntos ni letras.",
