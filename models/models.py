@@ -3,8 +3,14 @@ from odoo import models, fields, api
 class FisheryRegulation(models.Model):
     _name = 'fishery.regulation'
     _description = 'Registro de normativas legales'
-    _rec_name = 'official_regulations'
     _inherit = ["mail.thread", "mail.activity.mixin"]
+
+# información básica de la normativa
+    name = fields.Char(
+        string='Título',
+        readonly=True,
+        tracking=True,
+    )
 
     official_gazette = fields.Integer(
         string = 'N° gaceta oficial',
@@ -26,6 +32,7 @@ class FisheryRegulation(models.Model):
         tracking=True
     )
 
+# información adicional de la normativa
     regulation_type = fields.Selection( 
         [
             ('ley', 'Ley'),
@@ -49,6 +56,7 @@ class FisheryRegulation(models.Model):
         tracking=True
     )
 
+#información de relaciones entre normativas
     derogated_by_id = fields.Many2one( # "A" Normativa que es derogada.
         'fishery.regulation',
         string = 'Derogada por ...',
@@ -63,6 +71,7 @@ class FisheryRegulation(models.Model):
         help = 'Normativa a la cual deroga'
     )
 
+#información adicional de la normativa
     publication_date = fields.Date(
         string = 'Fecha de publicación',
         default = fields.Date.today
@@ -85,24 +94,53 @@ class FisheryRegulation(models.Model):
         required = True
     )
 
-    @api.model # para que A se actualice solo
-    def create(self, vals):
-        record = super().create(vals)
-        if record.type_status == 'vigente' and record.derogates_id:
-            record.derogates_id.write({
-                'type_status': 'derogado',
-                'derogated_by_id': record.id
-            })
-        return record
+# --- LÓGICA DE TÍTULO ---
+    def _generate_formal_title(self, vals):
+        base = "GACETA OFICIAL DE LA REPÚBLICA BOLIVARIANA DE VENEZUELA"
+        
+        # Obtenemos valores de vals (si se están escribiendo) o del registro actual
+        num = vals.get('official_gazette') or self.official_gazette
+        extra = vals.get('is_extraordinary') if 'is_extraordinary' in vals else self.is_extraordinary
+        
+        tipo = " (EXTRAORDINARIA)" if extra else ""
+        return f"{base} NRO. {num}{tipo}"
 
-    def write(self, vals): # evitar que B se seleccione a sí mismo
-        res = super().write(vals)
+    # --- MÉTODOS CRUD (FUSIONADOS) ---
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            # 1. Generar título antes de crear
+            vals['name'] = self.env['fishery.regulation']._generate_formal_title(vals)
+        
+        records = super(FisheryRegulation, self).create(vals_list)
+
+        # 2. Lógica de derogación tras crear
+        for record in records:
+            if record.type_status == 'vigente' and record.derogates_id:
+                if record.derogates_id.id == record.id:
+                    raise ValidationError(_("Una normativa no puede derogarse a sí misma."))
+                record.derogates_id.write({
+                    'type_status': 'derogado',
+                    'derogated_by_id': record.id
+                })
+        return records
+
+    def write(self, vals):
+        # 1. Si cambian campos del título, recalcularlo
+        if 'official_gazette' in vals or 'is_extraordinary' in vals:
+            for record in self:
+                vals['name'] = record._generate_formal_title(vals)
+
+        res = super(FisheryRegulation, self).write(vals)
+
+        # 2. Lógica de derogación al actualizar
         if 'type_status' in vals or 'derogates_id' in vals:
             for record in self:
                 if record.type_status == 'vigente' and record.derogates_id:
-                    if record.derogates_id.id != record.id:
-                        record.derogates_id.write({
-                            'type_status': 'derogado',
-                            'derogated_by_id': record.id
-                        })
+                    if record.derogates_id.id == record.id:
+                        raise ValidationError(_("Una normativa no puede derogarse a sí misma."))
+                    record.derogates_id.write({
+                        'type_status': 'derogado',
+                        'derogated_by_id': record.id
+                    })
         return res

@@ -3,7 +3,7 @@
     'version' : '1.0',
     'category' : 'Intranet',
     'description' : "Registro de normativas legales.",
-    'autor' : '',
+    'author' : 'Anthony',
     'depends' : ['base',"mail"],
 
     'data' : [
