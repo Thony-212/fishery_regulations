@@ -10,6 +10,7 @@ class FisheryRegulation(models.Model):
         string='Título',
         readonly=True,
         tracking=True,
+        help="El título se genera automáticamente a partir del número de gaceta oficial y si es extraordinaria o no."
     )
 
     official_gazette = fields.Integer(
@@ -20,7 +21,7 @@ class FisheryRegulation(models.Model):
     )
 
     official_regulations = fields.Char(
-        string = 'Número',
+        string = 'N°',
         required = True,
         help="Ingrese solo el número, sin puntos ni letras.",
         tracking=True
@@ -102,8 +103,8 @@ class FisheryRegulation(models.Model):
         num = vals.get('official_gazette') or self.official_gazette
         extra = vals.get('is_extraordinary') if 'is_extraordinary' in vals else self.is_extraordinary
         
-        tipo = " (EXTRAORDINARIA)" if extra else ""
-        return f"{base} NRO. {num}{tipo}"
+        tipo = " EXTRAORDINARIO" if extra else ""
+        return f"{base} N°. {num}{tipo}"
 
     # --- MÉTODOS CRUD (FUSIONADOS) ---
     @api.model_create_multi

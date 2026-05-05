@@ -53,11 +53,14 @@
                         <field name= "legal_instrument"/>
                     </group>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <chatter>
+                    <message_follower_ids>
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                    </message_follower_ids>
+                    <message_ids>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </message_ids>
+                </chatter>
             </form>
         </field>
     </record>
