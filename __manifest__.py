@@ -6,11 +6,13 @@
     'autor' : '',
     'depends' : ['base',"mail"],
 
-    'license': 'LGPL-3',
-
     'data' : [
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/views.xml',
-    ]
+    ],
+
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
 }
