@@ -38,8 +38,8 @@
                         <group>
                             <field name= "official_gazette"/>
                             <field name= "is_extraordinary"/>
-                            <field name= "official_regulations"/>
                             <field name= "regulation_type"/>
+                            <field name= "official_regulations"/>
                         </group>
                         <group>
                             <field name="derogates_id"/>
