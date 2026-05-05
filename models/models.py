@@ -10,6 +10,7 @@ class FisheryRegulation(models.Model):
         string='Título',
         readonly=True,
         tracking=True,
+        default="GACETA OFICIAL DE LA REPÚBLICA BOLIVARIANA DE VENEZUELA N°. [Número] [EXTRAORDINARIO]",
         help="El título se genera automáticamente a partir del número de gaceta oficial y si es extraordinaria o no."
     )
 

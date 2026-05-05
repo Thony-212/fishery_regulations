@@ -29,7 +29,7 @@
                 </header>
                 <sheet>
                     <div class="oe_title">
-                        <label for="name" string="Título de la Gaceta"/>
+                        <label for="name"/>
                         <h1>
                             <field name="name" placeholder="Se generará al guardar..."/>
                         </h1>
